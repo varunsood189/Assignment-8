@@ -112,17 +112,17 @@ S8SharedCode/code/
 
 ---
 
-## 6. Assignment parts 1–5 (evidence sessions)
+## 6. Example workflows (parts 1–5)
 
-| Part | What | Key session |
-|------|------|-------------|
-| **1** | Base queries hello, A, I, J, K | hello `s8-7f8a75bf`, A `s8-5c7b354b`, I `s8-30cc4b2c`, J `s8-ea8e55ff`, K `s8-65c8069d` |
-| **2** | Parallel fan-out (3+ branches); wall-clock = max not sum | `s8-453bce58` (CRISPR/mRNA/solar) |
-| **3** | Critic pass + fail + planner recovery | pass `s8-4fd467a0`, fail `s8-418393c0` |
-| **4** | Coder prompt + sandbox on compute query | `s8-30cc4b2c` (query I) |
-| **5** | New skill `comparator` in yaml + prompt | `s8-a6972d7c` |
+| Part | Script | Topic |
+|------|--------|-------|
+| **1** | `./scripts/run_assignment.sh 1 …` | hello, Shannon fetch, populations, graceful fail, resume |
+| **2** | `./scripts/run_assignment.sh 2` | Parallel fan-out — see `PARALLEL_FANOUT.md` |
+| **3** | `./scripts/run_assignment.sh 3` | Critic pass/fail — see `CRITIC_VERDICT.md` |
+| **4** | `./scripts/run_assignment.sh 4` | Coder + sandbox |
+| **5** | `./scripts/run_assignment.sh 5` | Comparator skill |
 
-**Regression:** `uv run pytest tests/test_recovery.py` — 22 passed.
+**Regression:** `uv run pytest tests/test_recovery.py`
 
 ---
 
@@ -175,9 +175,8 @@ Session data lives in `state/sessions/<sid>/`:
 
 | Document | Content |
 |----------|---------|
-| `README.md` | Full architecture (long) |
-| `ASSIGNMENT_STATUS.md` | Run commands + checklist |
+| `README.md` | Full architecture |
+| `ASSIGNMENT_STATUS.md` | Setup and run commands |
 | `CODE_EXPLANATION.pdf` | README as PDF |
-| `SESSIONS_CATALOG.pdf` | All saved sessions |
 | `PARALLEL_FANOUT.md` | Part 2 query design |
 | `CRITIC_VERDICT.md` | Part 3 query design |

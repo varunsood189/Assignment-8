@@ -18,8 +18,6 @@ uv run python flow.py "Use Python to compute 23 plus 19. The coder must emit JSO
 
 **Expect:** `coder` → `critic` (`verdict: pass`) → `formatter` with sum **42**.
 
-**Logged session:** `s8-4fd467a0`
-
 ---
 
 ## Fail + recovery run
@@ -31,8 +29,6 @@ uv run python flow.py "Use Python to compute 23 plus 19. The coder must emit JSO
 ```
 
 **Why not “emit sum 99”?** The coder usually computes the correct arithmetic anyway, so critic passes and recovery never runs. A wrong **critic threshold** (50) reliably produces `verdict: fail` when coder outputs 42.
-
-**Logged session:** `s8-418393c0` (older 99-query run); re-run with query above for fresh evidence.
 
 **Expect:**
 

@@ -142,11 +142,6 @@ your head.
 
 ## Provenance and version
 
-This package is the Session 8 build that passes the round-3 review.
-22 unit tests cover the failure-recovery + critic-splice mechanics.
-Five validation queries (hello, S7 carryover Shannon, parallel fan-out
-populations, graceful-fail nonexistent path, SIGKILL+resume) have been
-verified end-to-end on the same code you have here.
+This package is the Session 8 build with recovery + critic-splice unit tests (`tests/test_recovery.py`).
 
-If your `uv run python flow.py "hello"` produces a final answer, the
-build runs cleanly on your machine. The next step is ASSIGNMENT.md.
+If `uv run python flow.py "hello"` produces a final answer, the build runs cleanly on your machine.

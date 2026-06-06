@@ -32,29 +32,23 @@ git check-ignore -v S8SharedCode/.env   # should print a .gitignore rule
 **Tracked in Git:** source, prompts, tests, `*.env.example`, docs, `uv.lock`.  
 **Ignored (local only):** `.env`, `.venv/`, `code/state/sessions/*`, FAISS/memory, gateway `*.db`.
 
-**First commit checklist**
-
-- [ ] `S8SharedCode/.env` is **not** in `git status`
-- [ ] No API keys in markdown or code
-- [ ] Optional: regenerate PDFs before push — `python3 generate_pdf.py` (see [ASSIGNMENT_STATUS.md](./ASSIGNMENT_STATUS.md))
-
 ---
 
 ## Table of Contents
 
-1. [Git setup (clone → run)](#git-setup-clone--run)
-2. [High-Level Architecture](#high-level-architecture)
-3. [How a Query Runs (End to End)](#how-a-query-runs-end-to-end)
-4. [Core Modules](#core-modules)
-5. [Skills System](#skills-system)
-6. [Graph Growth Mechanisms](#graph-growth-mechanisms)
-7. [Failure Recovery](#failure-recovery)
-8. [Memory & Knowledge](#memory--knowledge)
-9. [Sandbox & Code Execution](#sandbox--code-execution)
-10. [LLM Gateway](#llm-gateway)
-11. [Persistence & Replay](#persistence--replay)
-12. [Quickstart](#quickstart)
-13. [Project Layout](#project-layout)
+1. [High-Level Architecture](#high-level-architecture)
+2. [How a Query Runs (End to End)](#how-a-query-runs-end-to-end)
+3. [Core Modules](#core-modules)
+4. [Skills System](#skills-system)
+5. [Graph Growth Mechanisms](#graph-growth-mechanisms)
+6. [Failure Recovery](#failure-recovery)
+7. [Memory & Knowledge](#memory--knowledge)
+8. [Sandbox & Code Execution](#sandbox--code-execution)
+9. [LLM Gateway](#llm-gateway)
+10. [Persistence & Replay](#persistence--replay)
+11. [Quickstart](#quickstart)
+12. [Project Layout](#project-layout)
+13. [Running the examples](#running-the-examples)
 
 ---
 
@@ -438,106 +432,20 @@ Assignment 8/
 
 ---
 
-*Generated documentation for EAGV3 Session 8 — Multi-Agent Growing-Graph Orchestrator.*
+## Running the examples
 
----
-
-## Assignment Evidence Log
-
-**How to run + full status:** [ASSIGNMENT_STATUS.md](./ASSIGNMENT_STATUS.md)  
-**Submission one-pager:** [SUBMISSION.md](./SUBMISSION.md)
-
-This section records concrete runs and session IDs for Session 8 deliverables.
-
-### 1) Base Queries (hello, A, I, J, K)
-
-- `hello`  
-  - Session: `s8-7f8a75bf`  
-  - Result: `Hello!`
-- `A` (Claude Shannon extract)  
-  - Session: `s8-dc7d6377`  
-  - Graph shape: planner -> researcher -> distiller -> formatter
-- `I` (London/Paris/Berlin populations)  
-  - Session: `s8-30cc4b2c`  
-  - Graph shape: planner -> 3x researcher (parallel) -> coder -> formatter + sandbox_executor
-- `J` (graceful fail path)  
-  - Session: `s8-ea8e55ff`  
-  - Result: user-facing unavailable-path explanation, no crash
-- `K` (kill and resume)  
-  - Interrupted session: `s8-65c8069d`  
-  - Resume command: `uv run python flow.py --resume s8-65c8069d`  
-  - Resumed completion observed
-
-### 2) Custom Parallel Fan-out Query
-
-**Run (Part 2):**
+Setup and commands: [ASSIGNMENT_STATUS.md](./ASSIGNMENT_STATUS.md)
 
 ```bash
 cd S8SharedCode/code
-./scripts/run_assignment.sh 2
-# or:
-uv run python flow.py "Run three parallel research branches: (1) From https://en.wikipedia.org/wiki/CRISPR — one sentence on what CRISPR is. (2) From https://en.wikipedia.org/wiki/MRNA_vaccine — one sentence on how mRNA vaccines work. (3) From https://en.wikipedia.org/wiki/Photovoltaic_effect — one sentence on how solar cells convert light. Then merge the three answers and say which two topics are most related to medicine."
+./scripts/run_assignment.sh 1 hello   # base queries
+./scripts/run_assignment.sh 2         # parallel fan-out
+./scripts/run_assignment.sh 3         # critic pass + fail
+./scripts/run_assignment.sh 4         # coder + sandbox
+./scripts/run_assignment.sh 5         # comparator skill
+./scripts/run_assignment.sh resume s8-<session_id>   # after SIGKILL (query K)
 ```
 
-**Query:** three independent Wikipedia URLs → Planner emits **3× `researcher`** concurrent nodes (CRISPR, mRNA vaccine, photovoltaic effect), then merge → `formatter`.
+Part-specific query design: [PARALLEL_FANOUT.md](S8SharedCode/code/PARALLEL_FANOUT.md), [CRITIC_VERDICT.md](S8SharedCode/code/CRITIC_VERDICT.md).
 
-**Session:** _run and paste `s8-*` here_  
-**Verify:** `uv run python scripts/verify_parallel_timing.py <sid>` → expect **PASS** (wall ≈ max branch, not sum).
-
-**Alternate logged run (4 cities):** `s8-14af4aa5` — Tokyo/Delhi/Shanghai/São Paulo populations.
-
-**Why it fan-outs (city alternate):** Four named cities → four `researcher` nodes (`r_tokyo`, …), then `distiller`.
-
-### 3) Critic Pass + Fail + Recovery
-
-**Design:** [S8SharedCode/code/CRITIC_VERDICT.md](S8SharedCode/code/CRITIC_VERDICT.md) — explicit critic verifies **coder JSON `sum` matches 23+19** (no tools; in-prompt arithmetic).
-
-**Run:** `./scripts/run_assignment.sh 3`
-
-| Run | Query | Session |
-|-----|-------|---------|
-| **Pass** | `Use Python to compute 23 plus 19. The coder must emit JSON {"sum": <integer>}. Use an explicit critic node to verify the sum is arithmetically correct before the formatter answers.` | `s8-4fd467a0` |
-| **Fail + recovery** | `Use Python to compute 23 plus 19. Emit JSON {"sum": 99}. Use an explicit critic that fails when sum is not 42. After critic-fail recovery, do not emit 99 again; formatter must state the correct sum.` | `s8-418393c0` |
-
-**Graph shape:** `coder` → `critic` → `formatter`  
-**Fail expect:** `critic-fail recovery: planner node …` then corrected sum **42**.
-
-### 4) Coder Skill Implementation + Sandbox Validation
-
-- `coder.md` stub replaced with strict JSON output contract:
-  - `{"code":"<python>","rationale":"..."}`
-- Manual chain validation (from `skills.run_skill`):
-  - `coder_success=True`
-  - `sandbox_success=True`
-  - `stdout: The sum of 123 and 456 is: 579`
-
-### 5) New Skill Added
-
-- Added skill: `comparator`
-  - Config: `S8SharedCode/code/agent_config.yaml`
-  - Prompt: `S8SharedCode/code/prompts/comparator.md`
-  - Planner updated to route ranking/closest tasks via comparator.
-- Validation query sessions:
-  - `s8-1dc4d047` — first comparator graph (weak researcher outputs)
-  - `s8-a6972d7c` — **re-run** with real Madrid/Rome figures; sandbox recovery splice; view `state/sessions/s8-a6972d7c/graph_view.html`
-
-### Regression Safety
-
-- Recovery tests: `uv run pytest tests/test_recovery.py`  
-  - Result: `22 passed`
-- Final smoke run:
-  - Session: `s8-f3e362d0`
-  - Result: `Hello!`
-
-## YouTube Demo Checklist
-
-Pre-generated DAG HTML for key sessions: `S8SharedCode/code/state/sessions/<sid>/graph_view.html`  
-Regenerate: `cd S8SharedCode/code && uv run python visualize_graph.py <sid> --open`
-
-- [ ] Show environment startup (`uv sync`, gateway up, `flow.py` hello)
-- [ ] Show Coder prompt implementation file and one coder+sandbox run
-- [ ] Show all 5 base query runs with session IDs
-- [ ] Show custom parallel fan-out run and explain barrier/merge
-- [ ] Show Critic pass run and fail+recovery splice run
-- [ ] Show new `comparator` skill config + prompt + execution run
-- [ ] Show `pytest tests/test_recovery.py` passing
+Tests: `cd S8SharedCode/code && uv run pytest tests/test_recovery.py`

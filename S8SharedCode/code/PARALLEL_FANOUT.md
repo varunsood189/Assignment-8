@@ -64,10 +64,4 @@ uv run python scripts/verify_parallel_timing.py <sid>
 
 **PASS** means layer wall-clock ≈ longest branch, and much less than the sum of all branch times.
 
-**On video:** show terminal lines for the parallel batch, e.g. three `[n:x] researcher complete (Xs)` with different seconds, then run the verify script.
-
 ---
-
-## Course note
-
-The Tokyo/Delhi/Shanghai run (`s8-14af4aa5`) already satisfies part 2. Use **this** query if you want a cleaner story that is not population/city trivia.

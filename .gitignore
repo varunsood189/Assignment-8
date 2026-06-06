@@ -50,7 +50,6 @@ S8SharedCode/gateway/usage.json
 *.swp
 *~
 
-# ── Optional: generated PDFs (uncomment to omit from repo; regen via generate_pdf.py)
-# CODE_EXPLANATION.pdf
-# PROJECT_GUIDE.pdf
-# SESSIONS_CATALOG.pdf
+# ── Generated locally (optional)
+SESSIONS_CATALOG.pdf
+docs/SESSIONS_CATALOG.md
