@@ -83,7 +83,7 @@ uv run pytest tests/test_recovery.py
 | 4 | `run_assignment.sh 4` | Coder + sandbox (query I) |
 | 5 | `run_assignment.sh 5` | Comparator skill |
 
-**Example session outputs:** [docs/RUN_RESULTS.md](../docs/RUN_RESULTS.md)
+**Example session outputs:** [docs/RUN_LOGS.md](../docs/RUN_LOGS.md) · [docs/RUN_RESULTS.md](../docs/RUN_RESULTS.md)
 
 ---
 

@@ -4,7 +4,7 @@ This repository contains **Session 8 (S8)** of the EAGV3 course: a multi-agent A
 
 The codebase lives under `S8SharedCode/` and splits into two main parts:
 
-**Latest run results:** [docs/RUN_RESULTS.md](./docs/RUN_RESULTS.md) (sessions from `./scripts/run_assignment.sh`, 2026-06-06)
+**Latest run logs:** [docs/RUN_LOGS.md](./docs/RUN_LOGS.md) · [docs/RUN_RESULTS.md](./docs/RUN_RESULTS.md) (2026-06-06 sessions)
 
 | Component | Path | Role |
 |-----------|------|------|
@@ -51,7 +51,7 @@ git check-ignore -v S8SharedCode/.env   # should print a .gitignore rule
 11. [Quickstart](#quickstart)
 12. [Project Layout](#project-layout)
 13. [Running the examples](#running-the-examples)
-14. [Run results](./docs/RUN_RESULTS.md)
+14. [Run logs](./docs/RUN_LOGS.md) · [Run results](./docs/RUN_RESULTS.md)
 
 ---
 
@@ -451,6 +451,6 @@ cd S8SharedCode/code
 
 Part-specific query design: [PARALLEL_FANOUT.md](S8SharedCode/code/PARALLEL_FANOUT.md), [CRITIC_VERDICT.md](S8SharedCode/code/CRITIC_VERDICT.md).
 
-**Recorded runs (session IDs + FINAL excerpts):** [docs/RUN_RESULTS.md](./docs/RUN_RESULTS.md)
+**Recorded runs:** [docs/RUN_LOGS.md](./docs/RUN_LOGS.md) (terminal excerpts) · [docs/RUN_RESULTS.md](./docs/RUN_RESULTS.md) (summary)
 
 Tests: `cd S8SharedCode/code && uv run pytest tests/test_recovery.py`
