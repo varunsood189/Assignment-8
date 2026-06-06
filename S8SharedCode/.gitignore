@@ -1,0 +1,37 @@
+# Secrets — NEVER commit
+.env
+.env.local
+.env.*
+!.env.example
+gateway/.env
+code/.env
+!gateway/.env.example
+
+# Local runtime state — regenerated on each run
+code/state/sessions/*/
+!code/state/sessions/.gitkeep
+code/state/memory.json
+code/state/index.faiss
+code/state/index_ids.json
+code/state/sessions/**/graph.pkl
+code/sandbox/*.txt
+!code/sandbox/papers/
+
+# Virtual environments
+code/.venv/
+gateway/.venv/
+
+# Gateway local data
+gateway/*.db
+gateway/usage.json
+
+# Build / cache
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+__MACOSX/

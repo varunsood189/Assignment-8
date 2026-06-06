@@ -1,0 +1,56 @@
+# ── Secrets (never commit) ───────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.local
+**/.env.*.local
+!**/.env.example
+
+# ── macOS / archive junk ─────────────────────────────────────────────────
+__MACOSX/
+**/__MACOSX/
+.DS_Store
+**/.DS_Store
+*.zip
+*.tar.gz
+
+# ── Python ───────────────────────────────────────────────────────────────
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# ── Local venvs (use uv sync to recreate) ────────────────────────────────
+**/.venv/
+
+# ── Runtime state (regenerated every run) ────────────────────────────────
+S8SharedCode/code/state/sessions/*/
+!S8SharedCode/code/state/sessions/.gitkeep
+S8SharedCode/code/state/memory.json
+S8SharedCode/code/state/index.faiss
+S8SharedCode/code/state/index_ids.json
+S8SharedCode/code/sandbox/*.txt
+!S8SharedCode/code/sandbox/papers/
+
+# Session checkpoints (resume)
+**/graph.pkl
+
+# ── Gateway local DB / usage logs ───────────────────────────────────────
+S8SharedCode/gateway/*.db
+S8SharedCode/gateway/usage.json
+
+# ── Editors / IDE ────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*~
+
+# ── Optional: generated PDFs (uncomment to omit from repo; regen via generate_pdf.py)
+# CODE_EXPLANATION.pdf
+# PROJECT_GUIDE.pdf
+# SESSIONS_CATALOG.pdf
